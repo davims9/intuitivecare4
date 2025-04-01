@@ -12,11 +12,15 @@ data = pd.read_csv('backend/Relatorio_cadop.csv', sep=';', encoding='utf-8-sig')
 def search():
     query = request.args.get('q')
     if not query:
-        return jsonify({"error": "Query não fornecida"}), 400
+        return jsonify({"error": "Por favor, forneça um termo de busca."}), 400
 
-    # Filtrar os registros mais relevantes
-    resultados = data[data['Razao_social'].str.contains(query, case=False, na=False)].head(10)
-    return jsonify(resultados.to_dict(orient='records'))
+    # Filtra os registros mais relevantes com base em Razao_Social
+    results = data[data['Razao_Social'].str.contains(query, case=False, na=False, regex=False)].head(10)
+
+    if results.empty:
+        return jsonify({"message": "Nenhum registro encontrado para o termo de busca."}), 404
+
+    return jsonify(results.to_dict(orient='records'))
 
 if __name__ == '__main__':
     app.run(debug=True)
