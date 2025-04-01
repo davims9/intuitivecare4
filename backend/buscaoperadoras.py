@@ -15,7 +15,7 @@ def search():
         return jsonify({"error": "Query não fornecida"}), 400
 
     # Filtrar os registros mais relevantes
-    resultados = data[data['Nome_Fantasia'].str.contains(query, case=False, na=False)].head(10)
+    resultados = data[data['Razao_social'].str.contains(query, case=False, na=False)].head(10)
     return jsonify(resultados.to_dict(orient='records'))
 
 if __name__ == '__main__':

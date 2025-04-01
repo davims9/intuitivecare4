@@ -1,22 +1,18 @@
 <template>
-    <div class="search-container">
-      <h2>Busca de Operadoras de Saúde</h2>
-      <input 
-        type="text" 
-        v-model="searchTerm" 
-        placeholder="Digite nome da operadora..." 
-      />
+    <div>
+      <h1>Busca de Operadoras</h1>
+      <input type="text" v-model="searchTerm" placeholder="Digite o nome da operadora..." />
       <button @click="performSearch">Buscar</button>
   
       <div v-if="loading">Carregando...</div>
       <div v-if="error">{{ error }}</div>
   
       <div v-if="results.length > 0">
-        <div v-for="item in results" :key="item.Registro_ANS">
-          <h3>{{ item.Nome_Fantasia }}</h3>
-          <p><strong>Razão Social:</strong> {{ item.Razao_Social }}</p>
-          <p><strong>CNPJ:</strong> {{ item.CNPJ }}</p>
-        </div>
+        <ul>
+          <li v-for="item in results" :key="item.Registro_">
+            {{ item.Nome_Fan }} - {{ item.CNPJ }}
+          </li>
+        </ul>
       </div>
     </div>
   </template>
@@ -28,7 +24,7 @@
         searchTerm: '',
         results: [],
         loading: false,
-        error: null
+        error: null,
       };
     },
     methods: {
@@ -36,11 +32,11 @@
         this.loading = true;
         this.error = null;
         try {
-          const response = await fetch(`https://intuitivecare-backend.onrender.com/api/search?q=${encodeURIComponent(this.searchTerm)}`);
-          if (!response.ok) throw new Error('Erro na requisição.');
+          const response = await fetch(`https://intuitivecare4.onrender.com/api/search?q=${encodeURIComponent(this.searchTerm)}`);
+          if (!response.ok) throw new Error('Erro na API');
           this.results = await response.json();
         } catch (err) {
-          this.error = 'Erro ao buscar dados.';
+          this.error = 'Erro ao buscar dados. Tente novamente.';
         } finally {
           this.loading = false;
         }
@@ -48,7 +44,3 @@
     }
   };
   </script>
-  
-  <style>
-  /* Ajuste de estilos */
-  </style>
